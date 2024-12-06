@@ -1,11 +1,9 @@
-
-
 import tensorflow as tf
 import tensorflow_datasets as tfds
 import matplotlib.pyplot as plt
 import numpy as np
 from tensorflow.keras.preprocessing import image
-from google.colab import files
+from tkinter import Tk, filedialog
 
 # Load the 'tf_flowers' dataset
 dataset, info = tfds.load('tf_flowers', with_info=True, as_supervised=True)
@@ -49,16 +47,16 @@ model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=
 # Train the model
 model.fit(train_dataset, validation_data=val_dataset, epochs=5)
 
-# Function to predict flower species from user-uploaded images
+# Function to predict flower species from user-selected images
 def predict_flower_species():
-    # Prompt user to upload an image
-    print("Please upload an image of a flower.")
-    uploaded = files.upload()
+    # Use tkinter to select an image file
+    root = Tk()
+    root.withdraw()  # Hide the root window
+    file_path = filedialog.askopenfilename(title="Select an Image", filetypes=[("Image Files", "*.jpg *.png")])
     
-    # Iterate through uploaded files
-    for file_name in uploaded.keys():
+    if file_path:
         # Load and preprocess the image
-        img = image.load_img(file_name, target_size=(IMG_SIZE, IMG_SIZE))
+        img = image.load_img(file_path, target_size=(IMG_SIZE, IMG_SIZE))
         img_array = image.img_to_array(img)
         img_array = np.expand_dims(img_array, axis=0) / 255.0  # Normalize and expand dims
         
@@ -74,6 +72,8 @@ def predict_flower_species():
         plt.show()
         
         print(f"The model predicts this is a '{flower_species}'.")
+    else:
+        print("No file was selected.")
 
 # Run the prediction function
 predict_flower_species()
