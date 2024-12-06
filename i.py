@@ -1,5 +1,4 @@
-# Install necessary packages
-!pip install tensorflow tensorflow-datasets matplotlib numpy
+
 
 import tensorflow as tf
 import tensorflow_datasets as tfds
